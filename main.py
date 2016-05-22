@@ -15,13 +15,16 @@ def main():
     #simulate_cross_and_mutate()
     #simulate_ranges_and_roulette()
     #simulate_roulette_selection()
+    print("this is just for simulation")
+    
+
+
+def simulate_the_steel_coils_initialize():
     lst = initialize_the_steel_coils()
     dict = lst[0]
     coils = lst[1]
     for word in dict:
         print(coils[word].print_attr())
-    #print("this is just for simulation")
-
 
 def initialize_the_steel_coils():
     dict = {}
