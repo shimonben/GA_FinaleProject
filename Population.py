@@ -68,11 +68,15 @@ class Population:
                         if chosen[0] != gene:
                             chosen.append(gene)
                             count += 1
-
         return chosen
 
+    def replacement_both_parents(self, child1, child2):
+        pops = self.getPop()
+        index1 = pops.index(child1)
+        index2 = pops.index(child2)
+        print(index1, child1.getSequence())
+        print(index2, child2.getSequence())
 
-    #def replacement(self, child1, child2):
 
 
 

@@ -15,7 +15,18 @@ def main():
     #simulate_cross_and_mutate()
     #simulate_ranges_and_roulette()
     #simulate_roulette_selection()
-    print("this is just for simulation")
+    #simulate_the_steel_coils_initialize()
+    #print("this is just for simulation")
+    population = Population.Population()
+    population.createInitial(CONST_POPULATION_SIZE)
+    population.updateGenesRange()
+    selected = population.rouletteSelection()
+    offspring = selected[0].crossover(selected[1])
+    for p in selected:
+        print(p.getSequence())
+    for k in offspring:
+        print(k.getSequence())
+
 
 
 
@@ -65,12 +76,10 @@ def simulate_cross_and_mutate():
     genes = population.getPop()
     gene1 = genes[5]
     gene2 = genes[8]
-    crossOverPoint = random.randint(0, CONST_SEQUENCE_LENGTH)
-    offspring = gene1.crossover(gene2, crossOverPoint)
+    offspring = gene1.crossover(gene2)
     print("The selected parents:")
     print(gene1.getSequence())
     print(gene2.getSequence())
-    print("The crossover is being started at: ", crossOverPoint)
     print("Their Children:")
     for kid in offspring:
         print(kid.getSequence())

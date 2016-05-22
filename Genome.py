@@ -40,8 +40,8 @@ class Genome:
     def evaluate(self):
         self.fitness = random.randint(0, 10)
 
-    def crossover(self, otherChrom, startingPoint):
-        position = startingPoint
+    def crossover(self, otherChrom):
+        position = random.randint(0, main.CONST_SEQUENCE_LENGTH)
         parent1 = self.getSequence()
         parent2 = otherChrom.getSequence()
         child1 = parent1[0:position]
