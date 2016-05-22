@@ -1,25 +1,33 @@
 import random
 import Genome
 import main
+import Steel
 
 
 class Population:
     pop_size = 0
     fitness = 0
 
-    def __init__(self):
+    def __init__(self, coils):
         Population.pop_size = 0
         Population.fitness = 0
         self.pop = []
         self.fitnessProbs = 0
+        self.coils = coils
 
     def createInitial(self, size):
         for i in range(size):
             self.pop_size += 1
             a = Genome.Genome()
-            a.evaluate()
+            a.evaluate(a.getSequence(), Steel.calculate_max_penalty(), self.coils)
             self.pop.append(a)
             self.fitness += a.fitness
+
+    def update_fitness(self):
+        self.fitness = 0
+        pop = self.pop
+        for chromosome in pop:
+            self.fitness += chromosome.fitness
 
     def getFitness(self):
         return self.fitness
@@ -75,10 +83,47 @@ class Population:
         index1 = pops.index(parents1)
         index2 = pops.index(parent2)
         pops.pop(index1)
+        if index2 == main.CONST_POPULATION_SIZE - 1:
+            index2 -= 1
         pops.pop(index2)
         pops.append(child1)
         pops.append(child2)
 
+    def replacement_random(self, child1, child2):
+        pops = self.getPop()
+        index1 = random.randint(0,main.CONST_POPULATION_SIZE-1)
+        pops.pop(index1)
+        index2 = random.randint(0, main.CONST_POPULATION_SIZE - 2)
+        pops.pop(index2)
+        pops.append(child1)
+        pops.append(child2)
 
+    def replacement_elitism(self, child1, child2):
+        pop = self.getPop()
+        index = 0
+        min = pop[0].getFit()
+        for i in range(main.CONST_POPULATION_SIZE):
+            if pop[i].getFit() < min:
+                min = pop[i].getFit()
+                index = i
+        pop.pop(index)
+        index = 0
+        min = pop[0].getFit()
+        for i in range(main.CONST_POPULATION_SIZE - 1):
+            if pop[i].getFit() < min:
+                min = pop[i].getFit()
+                index = i
+        pop.pop(index)
+        pop.append(child1)
+        pop.append(child2)
 
-
+    def get_best_solution(self):
+        index = 0
+        max = 0
+        pop = self.pop
+        for i in range(main.CONST_POPULATION_SIZE):
+            if pop[i].getFit() > max:
+                max = pop[i].getFit()
+                index = i
+        lst = [index, max]
+        return lst

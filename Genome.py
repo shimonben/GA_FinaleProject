@@ -1,6 +1,7 @@
 import main
 import random
 import numpy
+import Steel
 
 
 class Genome:
@@ -12,7 +13,6 @@ class Genome:
         self.sequence = list(self.sequence)
         self.fitness = 0
         self.range = [0, 0]
-        self.evaluate()
 
     def getSequence(self):
         return self.sequence
@@ -37,9 +37,15 @@ class Genome:
                 c.append(tempSeq[len(tempSeq) - k - 1])
             self.sequence[i:j] = c
 
-    def evaluate(self):
-        self.fitness = random.randint(0, 10)
-        #for i in range(main.CONST_SEQUENCE_LENGTH):
+    def evaluate(self, sequence, max_penalty, coils):
+        penalty = 0
+        for i in range(main.CONST_SEQUENCE_LENGTH):
+            if i < (main.CONST_SEQUENCE_LENGTH - 1):
+                temp = coils[sequence[i]].calculate_penalty(coils[sequence[i+1]])
+                temp = temp / max_penalty
+                penalty += temp
+        self.fitness = 1 - (penalty / max_penalty)
+
 
 
     def crossover(self, otherChrom):
