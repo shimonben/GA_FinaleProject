@@ -39,6 +39,8 @@ class Genome:
 
     def evaluate(self):
         self.fitness = random.randint(0, 10)
+        #for i in range(main.CONST_SEQUENCE_LENGTH):
+
 
     def crossover(self, otherChrom):
         position = random.randint(0, main.CONST_SEQUENCE_LENGTH)

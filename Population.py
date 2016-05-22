@@ -70,12 +70,14 @@ class Population:
                             count += 1
         return chosen
 
-    def replacement_both_parents(self, child1, child2):
+    def replacement_both_parents(self, parents1, parent2, child1, child2):
         pops = self.getPop()
-        index1 = pops.index(child1)
-        index2 = pops.index(child2)
-        print(index1, child1.getSequence())
-        print(index2, child2.getSequence())
+        index1 = pops.index(parents1)
+        index2 = pops.index(parent2)
+        pops.pop(index1)
+        pops.pop(index2)
+        pops.append(child1)
+        pops.append(child2)
 
 
 

@@ -20,15 +20,21 @@ def main():
     population = Population.Population()
     population.createInitial(CONST_POPULATION_SIZE)
     population.updateGenesRange()
+    genes = population.getPop()
     selected = population.rouletteSelection()
     offspring = selected[0].crossover(selected[1])
-    for p in selected:
-        print(p.getSequence())
-    for k in offspring:
-        print(k.getSequence())
+    population.replacement_both_parents(selected[0], selected[1], offspring[0], offspring[1])
+    population.updateGenesRange()
 
 
 
+
+def simulate_create_kids():
+    population = Population.Population()
+    population.createInitial(CONST_POPULATION_SIZE)
+    population.updateGenesRange()
+    selected = population.rouletteSelection()
+    offspring = selected[0].crossover(selected[1])
 
 def simulate_the_steel_coils_initialize():
     lst = initialize_the_steel_coils()
