@@ -16,7 +16,7 @@ def main():
     #simulate_ranges_and_roulette()
     #simulate_roulette_selection()
     print("this is just for simulation")
-    
+
 
 
 def simulate_the_steel_coils_initialize():
