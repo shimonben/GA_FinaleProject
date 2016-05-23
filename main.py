@@ -24,9 +24,7 @@ CONST_GENERATIONS = 500
 def main():
     writer = []
     for t in range(100):
-        lst = initialize_the_steel_coils()
-        dict = lst[0]
-        coils = lst[1]
+        coils = initialize_the_steel_coils()
         population = Population.Population(coils)
         population.createInitial(CONST_POPULATION_SIZE)
         for i in range(CONST_GENERATIONS):
@@ -71,8 +69,7 @@ def initialize_the_steel_coils():
         temp = Steel.Steel(thickness, width, zinc_thickness, steel_grade, i)
         dict[i] = temp.print_attr()
         coils.append(temp)
-    lst = [dict, coils]
-    return lst
+    return coils
 
 def write_to_file(lst, file_name):
     with open('%s.csv' % file_name, 'w', newline='') as csvfile:
