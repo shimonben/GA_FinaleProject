@@ -1,7 +1,6 @@
 import main
 import random
 import numpy
-import Steel
 
 
 class Genome:

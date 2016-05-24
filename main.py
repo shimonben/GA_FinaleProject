@@ -1,13 +1,13 @@
 # Genetic Algorithm testing - by Shimon Ben-Alul
 import random
-import numpy
 import Steel
-import Genome
 import Population
 import csv
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 50
+CONST_GENERATIONS = 500
+
 CONST_MUTATION_PROBABILITY = 0.7
 CONST_MAX_THICKNESS = 80
 CONST_MAX_WIDTH = 10
@@ -17,11 +17,24 @@ CONST_MIN_THICKNESS = 20
 CONST_MIN_WIDTH = 4
 CONST_MIN_ZINC_THICKNESS = 40
 CONST_MIN_STEEL_GRADE = 0.1
-CONST_GENERATIONS = 500
 
 
-# TODO dont forget to change the weights in Steel calss
 def main():
+    testing_the_algorithm()
+
+
+def preview_the_range_for_the_roulette():
+    coils = initialize_the_steel_coils()
+    population = Population.Population(coils)
+    population.createInitial(CONST_POPULATION_SIZE)
+    population.updateGenesRange()
+    genes = population.getPop()
+    i = 0
+    for gene in genes:
+        print("gene {:0>2}: from {:7.6f} to {:7.6f}, p({})={:7.6f}".format(i ,gene.range[0], gene.range[1], i, gene.range[1] - gene.range[0]))
+        i += 1
+
+def testing_the_algorithm():
     coils = initialize_the_steel_coils()
     population = Population.Population(coils)
     population.createInitial(CONST_POPULATION_SIZE)
@@ -41,7 +54,8 @@ def main():
         population.update_fitness()
         best = population.get_best_solution()
         total_fit = population.getFitness()
-        temp = "Generation: {:0>-3}, Total fit: {:07.4f}, {:0>-2} is the best Fit: {:06.4f}".format(i, total_fit, best[0], best[1])
+        temp = "Generation: {:0>-3}, Total fit: {:07.4f}, {:0>-2} is the best Fit: {:06.4f}".format(i, total_fit,
+                                                                                                    best[0], best[1])
         print(temp)
 
 
@@ -58,11 +72,13 @@ def initialize_the_steel_coils():
         coils.append(temp)
     return coils
 
+
 def write_to_file(lst, file_name):
     with open('%s.csv' % file_name, 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for item in lst:
             spamwriter.writerow(['%s' % item[0], '%s' % item[1]])
+
 
 def create_compareable_csv():
     writer = []
