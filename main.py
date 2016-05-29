@@ -7,7 +7,7 @@ import csv
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 50
-CONST_GENERATIONS = 1000
+CONST_GENERATIONS = 1000000
 
 CONST_MUTATION_PROBABILITY = 0.7
 CONST_MAX_THICKNESS = 80
@@ -21,10 +21,7 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    create_compareable_csv("random", 0)
-    create_compareable_csv("elitism", 1)
-    create_compareable_csv("both_parents", 2)
-    create_compareable_csv("elitism and random every 5 generations", 3, 5)
+    testing_the_algorithm()
 
 
 def preview_the_range_for_the_roulette():
