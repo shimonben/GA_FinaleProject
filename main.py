@@ -1,12 +1,15 @@
 # Genetic Algorithm testing - by Shimon Ben-Alul
 import random
+
+import switch as switch
+
 import Steel
 import Population
 import csv
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 50
-CONST_GENERATIONS = 500
+CONST_GENERATIONS = 1000
 
 CONST_MUTATION_PROBABILITY = 0.7
 CONST_MAX_THICKNESS = 80
@@ -20,7 +23,10 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    testing_the_algorithm()
+    create_compareable_csv("random", 0)
+    create_compareable_csv("elitism", 1)
+    create_compareable_csv("both_parents", 2)
+    create_compareable_csv("elitism and random every 5 generations", 3, 5)
 
 
 def preview_the_range_for_the_roulette():
@@ -31,8 +37,10 @@ def preview_the_range_for_the_roulette():
     genes = population.getPop()
     i = 0
     for gene in genes:
-        print("gene {:0>2}: from {:7.6f} to {:7.6f}, p({})={:7.6f}".format(i ,gene.range[0], gene.range[1], i, gene.range[1] - gene.range[0]))
+        print("gene {:0>2}: from {:7.6f} to {:7.6f}, p({})={:7.6f}".format(i, gene.range[0], gene.range[1], i,
+                                                                           gene.range[1] - gene.range[0]))
         i += 1
+
 
 def testing_the_algorithm():
     coils = initialize_the_steel_coils()
@@ -51,6 +59,10 @@ def testing_the_algorithm():
         # population.replacement_both_parents(selected[0], selected[1], offspring[0], offspring[1])
         # population.replacement_random(offspring[0], offspring[1])
         population.replacement_elitism(offspring[0], offspring[1])
+        # if i%5 == 0:
+        #    population.replacement_random(offspring[0], offspring[1])
+        # else:
+        #    population.replacement_elitism(offspring[0], offspring[1])
         population.update_fitness()
         best = population.get_best_solution()
         total_fit = population.getFitness()
@@ -60,7 +72,6 @@ def testing_the_algorithm():
 
 
 def initialize_the_steel_coils():
-    dict = {}
     coils = []
     for i in range(CONST_SEQUENCE_LENGTH):
         thickness = random.uniform(CONST_MIN_THICKNESS, CONST_MAX_THICKNESS)
@@ -68,21 +79,13 @@ def initialize_the_steel_coils():
         zinc_thickness = random.uniform(CONST_MIN_ZINC_THICKNESS, CONST_MAX_ZINC_THICKNESS)
         steel_grade = random.uniform(CONST_MIN_STEEL_GRADE, CONST_MAX_STEEL_GRADE)
         temp = Steel.Steel(thickness, width, zinc_thickness, steel_grade, i)
-        dict[i] = temp.print_attr()
         coils.append(temp)
     return coils
 
 
-def write_to_file(lst, file_name):
-    with open('%s.csv' % file_name, 'w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        for item in lst:
-            spamwriter.writerow(['%s' % item[0], '%s' % item[1]])
-
-
-def create_compareable_csv():
+def create_compareable_csv(filename, replacements_identifier, x=3):
     writer = []
-    for t in range(100):
+    for t in range(1000):
         coils = initialize_the_steel_coils()
         population = Population.Population(coils)
         population.createInitial(CONST_POPULATION_SIZE)
@@ -100,9 +103,17 @@ def create_compareable_csv():
             c2.mutate(CONST_MUTATION_PROBABILITY)
             c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
             c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
-            # population.replacement_both_parents(selected[0], selected[1], offspring[0], offspring[1])
-            population.replacement_random(offspring[0], offspring[1])
-            # population.replacement_elitism(offspring[0], offspring[1])
+            if replacements_identifier == 0:  # Random Replacement
+                population.replacement_random(offspring[0], offspring[1])
+            elif replacements_identifier == 1:  # Elitism Replacement
+                population.replacement_elitism(offspring[0], offspring[1])
+            elif replacements_identifier == 2:  # Both Parents Replacement
+                population.replacement_both_parents(selected[0], selected[1], offspring[0], offspring[1])
+            elif replacements_identifier == 3:  # Every x generation
+                if i % x == 0:
+                    population.replacement_random(offspring[0], offspring[1])
+                else:
+                    population.replacement_elitism(offspring[0], offspring[1])
             population.update_fitness()
             best = population.get_best_solution()
             total_fit = population.getFitness()
@@ -114,7 +125,14 @@ def create_compareable_csv():
         best_dif = best[1] - temp[1]
         temp = [total_dif, best_dif]
         writer.append(temp)
-    write_to_file(writer, 'test')
+    write_to_file(writer, filename)
+
+
+def write_to_file(lst, file_name):
+    with open('%s.csv' % file_name, 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for item in lst:
+            spamwriter.writerow(['%s' % item[0], '%s' % item[1]])
 
 
 if __name__ == "__main__": main()
