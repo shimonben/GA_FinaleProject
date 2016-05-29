@@ -1,8 +1,6 @@
 # Genetic Algorithm testing - by Shimon Ben-Alul
 import random
 
-import switch as switch
-
 import Steel
 import Population
 import csv
