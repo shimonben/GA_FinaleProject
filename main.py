@@ -6,7 +6,7 @@ import Population
 import csv
 
 CONST_SEQUENCE_LENGTH = 20
-CONST_POPULATION_SIZE = 50
+CONST_POPULATION_SIZE = 20
 CONST_GENERATIONS = 1000
 
 CONST_MUTATION_PROBABILITY = 0.8
@@ -21,7 +21,8 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    testing_the_algorithm()
+    ranges = preview_the_range_for_the_roulette()
+    write_to_file(ranges, "ranges example")
 
 
 def preview_the_range_for_the_roulette():
@@ -31,10 +32,16 @@ def preview_the_range_for_the_roulette():
     population.updateGenesRange()
     genes = population.getPop()
     i = 0
+    lst = []
     for gene in genes:
         print("gene {:0>2}: from {:7.6f} to {:7.6f}, p({})={:7.6f}".format(i, gene.range[0], gene.range[1], i,
                                                                            gene.range[1] - gene.range[0]))
+        temp = []
+        temp.append(gene.range[0])
+        temp.append(gene.range[1])
+        lst.append(temp)
         i += 1
+    return lst
 
 
 def testing_the_algorithm():
