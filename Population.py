@@ -29,6 +29,12 @@ class Population:
         for chromosome in pop:
             self.fitness += chromosome.fitness
 
+    def get_chromosome_by_index(self, index):
+        pop = self.getPop()
+        for i in range(main.CONST_POPULATION_SIZE):
+            if i == index:
+                return pop[i]
+
     def getFitness(self):
         return self.fitness
 
@@ -52,7 +58,7 @@ class Population:
         for gene in genes:
             max += gene.getFit() / totalFit
             gene.setRange(min, max)
-            min =  max
+            min = max
         self.fitnessProbs = min
 
     def getFitnessProb(self):
@@ -62,7 +68,7 @@ class Population:
         chosen = []
         genes = self.getPop()
         count = 0
-        while(count < 2):
+        while (count < 2):
             temp = random.uniform(0, self.getFitnessProb())
             for gene in genes:
                 range = gene.getRange()
@@ -91,7 +97,7 @@ class Population:
 
     def replacement_random(self, child1, child2):
         pops = self.getPop()
-        index1 = random.randint(0,main.CONST_POPULATION_SIZE-1)
+        index1 = random.randint(0, main.CONST_POPULATION_SIZE - 1)
         pops.pop(index1)
         index2 = random.randint(0, main.CONST_POPULATION_SIZE - 2)
         pops.pop(index2)

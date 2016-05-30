@@ -12,6 +12,7 @@ class Genome:
         self.sequence = list(self.sequence)
         self.fitness = 0
         self.range = [0, 0]
+        self.penalty = 0
 
     def getSequence(self):
         return self.sequence
@@ -44,8 +45,10 @@ class Genome:
                 temp = temp / max_penalty
                 penalty += temp
         self.fitness = 1 - (penalty / max_penalty)
+        self.penalty = penalty
 
-
+    def get_penalty(self):
+        return self.penalty
 
     def crossover(self, otherChrom):
         position = random.randint(0, main.CONST_SEQUENCE_LENGTH)

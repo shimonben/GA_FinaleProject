@@ -7,9 +7,9 @@ import csv
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 50
-CONST_GENERATIONS = 1000000
+CONST_GENERATIONS = 1000
 
-CONST_MUTATION_PROBABILITY = 0.7
+CONST_MUTATION_PROBABILITY = 0.9
 CONST_MAX_THICKNESS = 80
 CONST_MAX_WIDTH = 10
 CONST_MAX_ZINC_THICKNESS = 80
@@ -21,7 +21,10 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    testing_the_algorithm()
+    testing = []
+    for i in range(1000):
+        testing.append(testing_the_algorithm())
+    write_to_file(testing, "penalty for mutation 0.9")
 
 
 def preview_the_range_for_the_roulette():
@@ -41,6 +44,7 @@ def testing_the_algorithm():
     coils = initialize_the_steel_coils()
     population = Population.Population(coils)
     population.createInitial(CONST_POPULATION_SIZE)
+    penalty_write = []
     for i in range(CONST_GENERATIONS):
         population.updateGenesRange()
         selected = population.rouletteSelection()
@@ -63,7 +67,12 @@ def testing_the_algorithm():
         total_fit = population.getFitness()
         temp = "Generation: {:0>-3}, Total fit: {:07.4f}, {:0>-2} is the best Fit: {:06.4f}".format(i, total_fit,
                                                                                                     best[0], best[1])
-        print(temp)
+        # print(temp)
+        if i == 0 or i == CONST_GENERATIONS - 1:
+            index = best[0]
+            c = population.get_chromosome_by_index(index)
+            penalty_write.append(c.get_penalty())
+    return penalty_write
 
 
 def initialize_the_steel_coils():
