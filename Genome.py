@@ -44,7 +44,7 @@ class Genome:
                 temp = coils[sequence[i]].calculate_penalty(coils[sequence[i+1]])
                 temp = temp / max_penalty
                 penalty += temp
-        self.fitness = 1 - (penalty / max_penalty)
+        self.fitness = 1 - (penalty / (main.CONST_SEQUENCE_LENGTH - 1))
         self.penalty = penalty
 
     def get_penalty(self):
