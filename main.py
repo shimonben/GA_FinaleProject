@@ -6,10 +6,10 @@ import Population
 import csv
 
 CONST_SEQUENCE_LENGTH = 20
-CONST_POPULATION_SIZE = 20
+CONST_POPULATION_SIZE = 50
 CONST_GENERATIONS = 1000
 
-CONST_MUTATION_PROBABILITY = 0.8
+CONST_MUTATION_PROBABILITY = 0.6
 CONST_MAX_THICKNESS = 80
 CONST_MAX_WIDTH = 10
 CONST_MAX_ZINC_THICKNESS = 80
@@ -21,8 +21,8 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    ranges = preview_the_range_for_the_roulette()
-    write_to_file(ranges, "ranges example")
+    temp = testing_the_algorithm()
+    write_to_file(temp, "prob 0.6")
 
 
 def preview_the_range_for_the_roulette():
@@ -48,6 +48,7 @@ def testing_the_algorithm():
     coils = initialize_the_steel_coils()
     population = Population.Population(coils)
     population.createInitial(CONST_POPULATION_SIZE)
+    temp = []
     for i in range(CONST_GENERATIONS):
         population.updateGenesRange()
         selected = population.rouletteSelection()
@@ -68,11 +69,12 @@ def testing_the_algorithm():
         population.update_fitness()
         best = population.get_best_solution()
         total_fit = population.getFitness()
-        lst = []
         c = population.get_chromosome_by_index(best[0])
-        lst.append(best[0])
+        lst = []
+        lst.append(c.get_penalty())
         lst.append(best[1])
-        #print(lst)
+        temp.append(lst)
+    return temp
 
 
 def initialize_the_steel_coils():
