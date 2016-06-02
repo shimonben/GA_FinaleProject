@@ -1,4 +1,5 @@
 # Genetic Algorithm testing - by Shimon Ben-Alul
+import pickle
 import random
 
 import Steel
@@ -6,10 +7,10 @@ import Population
 import csv
 
 CONST_SEQUENCE_LENGTH = 20
-CONST_POPULATION_SIZE = 50
-CONST_GENERATIONS = 1000
+CONST_POPULATION_SIZE = 200
+CONST_GENERATIONS = 100000000
 
-CONST_MUTATION_PROBABILITY = 0.6
+CONST_MUTATION_PROBABILITY = 0.75
 CONST_MAX_THICKNESS = 80
 CONST_MAX_WIDTH = 10
 CONST_MAX_ZINC_THICKNESS = 80
@@ -21,8 +22,38 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    temp = testing_the_algorithm()
-    write_to_file(temp, "prob 0.6")
+    coils_are_already_saved = 1
+    if coils_are_already_saved == 0:
+        coils = initialize_the_steel_coils()
+        with open('coils.pickle', 'wb') as f:
+            pickle.dump(coils, f)
+    else:
+        with open('coils.pickle', 'rb') as f:
+            coils = pickle.load(f)
+    testing_the_algorithm(coils)
+
+
+def testing_the_algorithm(coils):
+    population = Population.Population(coils)
+    population.createInitial(CONST_POPULATION_SIZE)
+    lst = []
+    for i in range(CONST_GENERATIONS):
+        population.updateGenesRange()
+        selected = population.rouletteSelection()
+        offspring = selected[0].crossover(selected[1])
+        c1 = offspring[0]
+        c2 = offspring[1]
+        c1.mutate(CONST_MUTATION_PROBABILITY)
+        c2.mutate(CONST_MUTATION_PROBABILITY)
+        c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
+        c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
+        population.replacement_elitism(offspring[0], offspring[1])
+        population.update_fitness()
+        best = population.get_best_solution()
+        total_fit = population.getFitness()
+        if i == 0 or i == CONST_GENERATIONS - 1:
+            lst.append(best[1])
+    print(lst[1] - lst[0])
 
 
 def preview_the_range_for_the_roulette():
@@ -42,39 +73,6 @@ def preview_the_range_for_the_roulette():
         lst.append(temp)
         i += 1
     return lst
-
-
-def testing_the_algorithm():
-    coils = initialize_the_steel_coils()
-    population = Population.Population(coils)
-    population.createInitial(CONST_POPULATION_SIZE)
-    temp = []
-    for i in range(CONST_GENERATIONS):
-        population.updateGenesRange()
-        selected = population.rouletteSelection()
-        offspring = selected[0].crossover(selected[1])
-        c1 = offspring[0]
-        c2 = offspring[1]
-        c1.mutate(CONST_MUTATION_PROBABILITY)
-        c2.mutate(CONST_MUTATION_PROBABILITY)
-        c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
-        c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
-        # population.replacement_both_parents(selected[0], selected[1], offspring[0], offspring[1])
-        # population.replacement_random(offspring[0], offspring[1])
-        population.replacement_elitism(offspring[0], offspring[1])
-        # if i%5 == 0:
-        #    population.replacement_random(offspring[0], offspring[1])
-        # else:
-        #    population.replacement_elitism(offspring[0], offspring[1])
-        population.update_fitness()
-        best = population.get_best_solution()
-        total_fit = population.getFitness()
-        c = population.get_chromosome_by_index(best[0])
-        lst = []
-        lst.append(c.get_penalty())
-        lst.append(best[1])
-        temp.append(lst)
-    return temp
 
 
 def initialize_the_steel_coils():
