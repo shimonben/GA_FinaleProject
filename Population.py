@@ -1,6 +1,6 @@
 import random
 import Genome
-import main
+import GAutils
 import Steel
 
 
@@ -31,7 +31,7 @@ class Population:
 
     def get_chromosome_by_index(self, index):
         pop = self.getPop()
-        for i in range(main.CONST_POPULATION_SIZE):
+        for i in range(GAutils.CONST_POPULATION_SIZE):
             if i == index:
                 return pop[i]
 
@@ -42,12 +42,12 @@ class Population:
         return self.pop
 
     def createOffspring(self, parent1, parent2):
-        crossOverPoint = random.randint(0, main.CONST_SEQUENCE_LENGTH)
+        crossOverPoint = random.randint(0, GAutils.CONST_SEQUENCE_LENGTH)
         offspring = parent1.crossover(parent2, crossOverPoint)
         c1 = offspring[0]
         c2 = offspring[1]
-        c1.mutate(main.CONST_MUTATION_PROBABILITY)
-        c2.mutate(main.CONST_MUTATION_PROBABILITY)
+        c1.mutate(GAutils.CONST_MUTATION_PROBABILITY)
+        c2.mutate(GAutils.CONST_MUTATION_PROBABILITY)
         return offspring
 
     def updateGenesRange(self):
@@ -89,7 +89,7 @@ class Population:
         index1 = pops.index(parents1)
         index2 = pops.index(parent2)
         pops.pop(index1)
-        if index2 == main.CONST_POPULATION_SIZE - 1:
+        if index2 == GAutils.CONST_POPULATION_SIZE - 1:
             index2 -= 1
         pops.pop(index2)
         pops.append(child1)
@@ -97,9 +97,9 @@ class Population:
 
     def replacement_random(self, child1, child2):
         pops = self.getPop()
-        index1 = random.randint(0, main.CONST_POPULATION_SIZE - 1)
+        index1 = random.randint(0, GAutils.CONST_POPULATION_SIZE - 1)
         pops.pop(index1)
-        index2 = random.randint(0, main.CONST_POPULATION_SIZE - 2)
+        index2 = random.randint(0, GAutils.CONST_POPULATION_SIZE - 2)
         pops.pop(index2)
         pops.append(child1)
         pops.append(child2)
@@ -108,14 +108,14 @@ class Population:
         pop = self.getPop()
         index = 0
         min = pop[0].getFit()
-        for i in range(main.CONST_POPULATION_SIZE):
+        for i in range(GAutils.CONST_POPULATION_SIZE):
             if pop[i].getFit() < min:
                 min = pop[i].getFit()
                 index = i
         pop.pop(index)
         index = 0
         min = pop[0].getFit()
-        for i in range(main.CONST_POPULATION_SIZE - 1):
+        for i in range(GAutils.CONST_POPULATION_SIZE - 1):
             if pop[i].getFit() < min:
                 min = pop[i].getFit()
                 index = i
@@ -127,7 +127,7 @@ class Population:
         index = 0
         max = 0
         pop = self.pop
-        for i in range(main.CONST_POPULATION_SIZE):
+        for i in range(GAutils.CONST_POPULATION_SIZE):
             if pop[i].getFit() > max:
                 max = pop[i].getFit()
                 index = i

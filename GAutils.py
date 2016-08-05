@@ -23,15 +23,36 @@ def get_coils_from_excel():
     ws = wb.active
     coils = []
     i = 0
-    for row in ws.iter_rows('B2:E21'):
-        thickness = row[0].value
-        width = row[1].value
-        zinc_thickness = row[2].value
-        steel_grade = row[3].value
-        temp = Steel.Steel(thickness, width, zinc_thickness, steel_grade, i)
-        i += 1
-        coils.append(temp)
+    temp = 'B2:E'
+    temp += str(CONST_SEQUENCE_LENGTH + 1)
+    for row in ws.iter_rows(temp):
+        if check_validity(row, i):
+            thickness = row[3].value
+            width = row[2].value
+            zinc_thickness = row[1].value
+            steel_grade = row[0].value
+            temp = Steel.Steel(thickness, width, zinc_thickness, steel_grade, i)
+            i += 1
+        else:
+            print("Values are not in range! program shut down")
+            exit()
     return coils
+
+
+def check_validity(row, i):
+    if (row[3].value < CONST_MIN_THICKNESS) or (row[3].value > CONST_MAX_THICKNESS):
+        print("in coil ", i+1, ", there is a problem with thickness")
+        return False
+    if (row[2].value < CONST_MIN_WIDTH) or (row[2].value > CONST_MAX_WIDTH):
+        print("in coil ", i+1, ", there is a problem with width")
+        return False
+    if (row[1].value < CONST_MIN_ZINC_THICKNESS) or (row[1].value > CONST_MAX_ZINC_THICKNESS):
+        print("in coil ", i+1, ", there is a problem with zinc thickness")
+        return False
+    if (row[0].value < CONST_MIN_STEEL_GRADE) or (row[0].value > CONST_MAX_STEEL_GRADE):
+        print("in coil ", i+1, ", there is a problem with steel grade")
+        return False
+    return True
 
 
 def testing_the_algorithm(coils):

@@ -1,4 +1,4 @@
-import main
+import GAutils
 import random
 import numpy
 
@@ -6,7 +6,7 @@ import numpy
 class Genome:
     def __init__(self, seq=0):
         if seq == 0:
-            self.sequence = numpy.random.permutation(main.CONST_SEQUENCE_LENGTH)
+            self.sequence = numpy.random.permutation(GAutils.CONST_SEQUENCE_LENGTH)
         else:
             self.sequence = seq
         self.sequence = list(self.sequence)
@@ -27,8 +27,8 @@ class Genome:
         return self.fitness
 
     def mutate(self, prob):
-        i = random.randint(0, main.CONST_SEQUENCE_LENGTH)
-        j = random.randint(i, main.CONST_SEQUENCE_LENGTH)
+        i = random.randint(0, GAutils.CONST_SEQUENCE_LENGTH)
+        j = random.randint(i, GAutils.CONST_SEQUENCE_LENGTH)
         temp = random.uniform(0, 1)
         if temp < prob:
             tempSeq = self.sequence[i:j]
@@ -39,18 +39,18 @@ class Genome:
 
     def evaluate(self, sequence, max_penalty, coils):
         penalty = 0
-        for i in range(main.CONST_SEQUENCE_LENGTH -1):
+        for i in range(GAutils.CONST_SEQUENCE_LENGTH -1):
             temp = coils[sequence[i]].calculate_penalty(coils[sequence[i+1]])
             temp = temp / max_penalty
             penalty += temp
-        self.fitness = 1 - (penalty / (main.CONST_SEQUENCE_LENGTH - 1))
-        self.penalty = penalty / (main.CONST_SEQUENCE_LENGTH - 1)
+        self.fitness = 1 - (penalty / (GAutils.CONST_SEQUENCE_LENGTH - 1))
+        self.penalty = penalty / (GAutils.CONST_SEQUENCE_LENGTH - 1)
 
     def get_penalty(self):
         return self.penalty
 
     def crossover(self, otherChrom):
-        position = random.randint(0, main.CONST_SEQUENCE_LENGTH)
+        position = random.randint(0, GAutils.CONST_SEQUENCE_LENGTH)
         parent1 = self.getSequence()
         parent2 = otherChrom.getSequence()
         child1 = parent1[0:position]
@@ -59,7 +59,7 @@ class Genome:
         parent2 = list(parent2)
         child1 = list(child1)
         child2 = list(child2)
-        for j in range(main.CONST_SEQUENCE_LENGTH):
+        for j in range(GAutils.CONST_SEQUENCE_LENGTH):
             if parent2[j] not in child1:
                 child1.append(parent2[j])
             if parent1[j] not in child2:
