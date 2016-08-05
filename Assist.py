@@ -1,5 +1,8 @@
 import os
 
+from openpyxl import load_workbook
+import Steel
+
 CONST_SEQUENCE_LENGTH = 20
 
 CONST_MAX_THICKNESS = 80

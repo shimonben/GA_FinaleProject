@@ -1,4 +1,4 @@
-from GeneticAlgorithm import GAutils
+import GAutils
 
 
 def replacement_elitism(population, child1, child2):

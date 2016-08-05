@@ -1,8 +1,6 @@
-import random
-
 import GAutils
-
-from GeneticAlgorithm import Genome
+import random
+import Genome
 
 
 def crossover(chrom1, chrom2):

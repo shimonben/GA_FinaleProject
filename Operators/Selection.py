@@ -1,3 +1,4 @@
+import GAutils
 import random
 
 def rouletteSelection(population):
