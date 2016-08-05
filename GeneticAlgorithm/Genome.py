@@ -1,5 +1,6 @@
-import GAutils
 import numpy
+
+from GeneticAlgorithm import GAutils
 
 
 class Genome:

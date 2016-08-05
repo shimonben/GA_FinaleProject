@@ -3,7 +3,7 @@
 #       Hila Fox
 import os
 
-import GAutils
+from GeneticAlgorithm import GAutils
 
 
 # The user will get the option to choose between priority

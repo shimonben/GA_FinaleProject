@@ -1,5 +1,6 @@
-import GAutils
 import math
+
+from GeneticAlgorithm import GAutils
 
 CONST_THICKNESS_PENALTY = 0.1
 CONST_WIDTH_PENALTY = 0.2
@@ -10,7 +11,8 @@ CONST_STEEL_GRADE_PENALTY = 0.2
 def calculate_max_penalty():
     thickness_penalty = (GAutils.CONST_MAX_THICKNESS - GAutils.CONST_MIN_THICKNESS) * CONST_THICKNESS_PENALTY
     width_penalty = (GAutils.CONST_MAX_WIDTH - GAutils.CONST_MIN_WIDTH) * CONST_WIDTH_PENALTY
-    zinc_thickness_penalty = (GAutils.CONST_MAX_ZINC_THICKNESS - GAutils.CONST_MIN_ZINC_THICKNESS) * CONST_ZINC_THICKNESS_PENALTY
+    zinc_thickness_penalty = (
+                             GAutils.CONST_MAX_ZINC_THICKNESS - GAutils.CONST_MIN_ZINC_THICKNESS) * CONST_ZINC_THICKNESS_PENALTY
     steel_grade_penalty = (GAutils.CONST_MAX_STEEL_GRADE - GAutils.CONST_MIN_STEEL_GRADE) * CONST_STEEL_GRADE_PENALTY
     max_penalty = thickness_penalty + width_penalty + zinc_thickness_penalty + steel_grade_penalty
     return max_penalty

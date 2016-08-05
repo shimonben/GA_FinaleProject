@@ -1,5 +1,6 @@
-import GAutils
 import random
+
+from GeneticAlgorithm import GAutils
 
 
 def mutate(child):

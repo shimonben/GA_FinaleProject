@@ -1,7 +1,7 @@
-import random
-import Genome
 import GAutils
 import Steel
+
+from GeneticAlgorithm import Genome
 
 
 class Population:

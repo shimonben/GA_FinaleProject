@@ -1,10 +1,11 @@
-from openpyxl import load_workbook
 import Population
-import Steel
+from openpyxl import load_workbook
+
+from GeneticAlgorithm import Steel
 from Operators.CrossOver import crossover
 from Operators.Mutation import mutate
-from Operators.Selection import rouletteSelection
 from Operators.Replacement import replacement_elitism
+from Operators.Selection import rouletteSelection
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 500
