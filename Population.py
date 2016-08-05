@@ -41,15 +41,6 @@ class Population:
     def getPop(self):
         return self.pop
 
-    def createOffspring(self, parent1, parent2):
-        crossOverPoint = random.randint(0, GAutils.CONST_SEQUENCE_LENGTH)
-        offspring = parent1.crossover(parent2, crossOverPoint)
-        c1 = offspring[0]
-        c2 = offspring[1]
-        c1.mutate(GAutils.CONST_MUTATION_PROBABILITY)
-        c2.mutate(GAutils.CONST_MUTATION_PROBABILITY)
-        return offspring
-
     def updateGenesRange(self):
         genes = self.getPop()
         totalFit = self.fitness
@@ -64,64 +55,8 @@ class Population:
     def getFitnessProb(self):
         return self.fitnessProbs
 
-    def rouletteSelection(self):
-        chosen = []
-        genes = self.getPop()
-        count = 0
-        while (count < 2):
-            temp = random.uniform(0, self.getFitnessProb())
-            for gene in genes:
-                range = gene.getRange()
-                max = range[1]
-                min = range[0]
-                if temp < max and temp > min:
-                    if count == 0:
-                        chosen.append(gene)
-                        count += 1
-                    else:
-                        if chosen[0] != gene:
-                            chosen.append(gene)
-                            count += 1
-        return chosen
-
-    def replacement_both_parents(self, parents1, parent2, child1, child2):
-        pops = self.getPop()
-        index1 = pops.index(parents1)
-        index2 = pops.index(parent2)
-        pops.pop(index1)
-        if index2 == GAutils.CONST_POPULATION_SIZE - 1:
-            index2 -= 1
-        pops.pop(index2)
-        pops.append(child1)
-        pops.append(child2)
-
-    def replacement_random(self, child1, child2):
-        pops = self.getPop()
-        index1 = random.randint(0, GAutils.CONST_POPULATION_SIZE - 1)
-        pops.pop(index1)
-        index2 = random.randint(0, GAutils.CONST_POPULATION_SIZE - 2)
-        pops.pop(index2)
-        pops.append(child1)
-        pops.append(child2)
-
-    def replacement_elitism(self, child1, child2):
-        pop = self.getPop()
-        index = 0
-        min = pop[0].getFit()
-        for i in range(GAutils.CONST_POPULATION_SIZE):
-            if pop[i].getFit() < min:
-                min = pop[i].getFit()
-                index = i
-        pop.pop(index)
-        index = 0
-        min = pop[0].getFit()
-        for i in range(GAutils.CONST_POPULATION_SIZE - 1):
-            if pop[i].getFit() < min:
-                min = pop[i].getFit()
-                index = i
-        pop.pop(index)
-        pop.append(child1)
-        pop.append(child2)
+    def setPop(self, pop):
+        self.pop = pop
 
     def get_best_solution(self):
         index = 0

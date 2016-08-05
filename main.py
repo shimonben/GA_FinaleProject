@@ -14,7 +14,7 @@ def main():
         coils = GAutils.get_coils_from_excel()
         GAutils.testing_the_algorithm(coils)
     else:
-        print("Excel file containing the coils not exist, system shutdown")
+        print("Excel file not found, system shutdown")
         exit()
 
 
