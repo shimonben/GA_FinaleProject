@@ -16,8 +16,8 @@ class Population:
         self.coils = coils
 
     def createInitial(self, size):
+        self.pop_size = size
         for i in range(size):
-            self.pop_size += 1
             a = Genome.Genome()
             a.evaluate(a.getSequence(), Steel.calculate_max_penalty(), self.coils)
             self.pop.append(a)
@@ -56,7 +56,7 @@ class Population:
         min = 0
         max = 0
         for gene in genes:
-            max += gene.getFit() / totalFit
+            max += (gene.getFit() / totalFit)
             gene.setRange(min, max)
             min = max
         self.fitnessProbs = min

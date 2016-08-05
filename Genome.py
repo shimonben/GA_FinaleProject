@@ -39,11 +39,10 @@ class Genome:
 
     def evaluate(self, sequence, max_penalty, coils):
         penalty = 0
-        for i in range(main.CONST_SEQUENCE_LENGTH):
-            if i < (main.CONST_SEQUENCE_LENGTH - 1):
-                temp = coils[sequence[i]].calculate_penalty(coils[sequence[i+1]])
-                temp = temp / max_penalty
-                penalty += temp
+        for i in range(main.CONST_SEQUENCE_LENGTH -1):
+            temp = coils[sequence[i]].calculate_penalty(coils[sequence[i+1]])
+            temp = temp / max_penalty
+            penalty += temp
         self.fitness = 1 - (penalty / (main.CONST_SEQUENCE_LENGTH - 1))
         self.penalty = penalty / (main.CONST_SEQUENCE_LENGTH - 1)
 
