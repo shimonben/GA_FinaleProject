@@ -89,8 +89,8 @@ def testing_the_algorithm(coils):
             temp.append(population.get_chromosome_by_index(best[0]).getSequence())
             temp.append(best[1])
             lst.append(temp)
-    save_data_to_excel_first_and_last(lst)
-    return lst
+    #save_data_to_excel_first_and_last(lst)
+    save_data_to_excel(lst)
 
 
 def save_data_to_excel_first_and_last(lst):
@@ -117,38 +117,6 @@ def save_data_to_excel_first_and_last(lst):
     cell = "D" + str(CONST_SEQUENCE_LENGTH + 1)
     ws[cell] = float(lst[1][1])
     wb.save("1st & last gens.xlsx")
-
-    def testing_the_algorithm(coils):
-        population = Population.Population(coils)
-        population.createInitial(CONST_POPULATION_SIZE)
-        lst = []
-        temp = []
-        for i in range(CONST_GENERATIONS):
-            population.updateGenesRange()
-            best = population.get_best_solution()
-            if i == 0:
-                temp.append(population.get_chromosome_by_index(best[0]).getSequence())
-                temp.append(best[1])
-                lst.append(temp)
-                temp = []
-            selected = rouletteSelection(population)
-            offspring = crossover(selected[0], selected[1])
-            c1 = offspring[0]
-            c2 = offspring[1]
-            c1 = mutate(c1)
-            c2 = mutate(c2)
-            c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
-            c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
-            population = replacement_elitism(population, offspring[0], offspring[1])
-            population.update_fitness()
-            best = population.get_best_solution()
-            # print("Generation ", i, " best: ", population.get_chromosome_by_index(best[0]).getSequence(), ", with fitness: ", best[1])
-            if i == (CONST_GENERATIONS - 1):
-                temp.append(population.get_chromosome_by_index(best[0]).getSequence())
-                temp.append(best[1])
-                lst.append(temp)
-        save_data_to_excel_first_and_last(lst)
-        return lst
 
 
 def testing_the_algorithm_1000_runs(coils):
@@ -202,3 +170,23 @@ def testing_the_algorithm_1000_runs(coils):
     ws["E2"] = CONST_POPULATION_SIZE
     file_name = str(CONST_GENERATIONS_TO_TEST) + " runs avg.xlsx"
     wb.save(file_name)
+
+
+def save_data_to_excel(lst):
+    wb = Workbook()
+    ws = wb.active
+    ws["A1"] = "sequence to use:"
+    ws["C1"] = "fitness improvement:"
+    ws["C2"] = "penalty improvement:"
+    ws["D1"] = float(float(lst[1][1])/float(lst[0][1]))*100
+    ws["D2"] = float((1-float(lst[1][1])) / (1-float(lst[0][1])))*100
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 1)
+    ws[cell] = "last generation fit:"
+    cell = "B"
+    for j in range(CONST_SEQUENCE_LENGTH):
+        temp = cell + str(j+1)
+        ws[temp] = int(lst[1][0][j])
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 1)
+    ws[cell] = float(lst[1][1])
+    wb.save("output.xlsx")
+    print(float(lst[1][1]))
