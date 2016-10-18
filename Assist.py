@@ -1,5 +1,6 @@
 import os
 
+import openpyxl
 from openpyxl import load_workbook
 import Steel
 
@@ -16,7 +17,17 @@ CONST_MIN_STEEL_GRADE = 0.1
 
 
 def main():
-    print(os.path.isfile("co.xlsx"))
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws["A1"] = "first generation:"
+    ws["C1"] = "last generation:"
+    cell = "B"
+    for i in range(2):
+        for j in range(CONST_SEQUENCE_LENGTH):
+            temp = cell + str(j+1)
+            ws[temp] = lst[i][j]
+        cell = "D"
+    wb.save("1st & last gens.xlsx")
 
 
 

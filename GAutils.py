@@ -1,4 +1,5 @@
 from openpyxl import load_workbook
+from openpyxl import Workbook
 import Population
 import Steel
 from Operators.CrossOver import crossover
@@ -7,8 +8,8 @@ from Operators.Selection import rouletteSelection
 from Operators.Replacement import replacement_elitism
 
 CONST_SEQUENCE_LENGTH = 20
-CONST_POPULATION_SIZE = 500
-CONST_GENERATIONS = 5000
+CONST_POPULATION_SIZE = 250
+CONST_GENERATIONS = 1000
 CONST_MUTATION_PROBABILITY = 0.75
 CONST_MAX_THICKNESS = 80
 CONST_MAX_WIDTH = 10
@@ -62,9 +63,15 @@ def testing_the_algorithm(coils):
     population = Population.Population(coils)
     population.createInitial(CONST_POPULATION_SIZE)
     lst = []
+    temp = []
     for i in range(CONST_GENERATIONS):
         population.updateGenesRange()
-        pop = population.getPop()
+        best = population.get_best_solution()
+        if i == 0:
+            temp.append(population.get_chromosome_by_index(best[0]).getSequence())
+            temp.append(best[1])
+            lst.append(temp)
+            temp = []
         selected = rouletteSelection(population)
         offspring = crossover(selected[0], selected[1])
         c1 = offspring[0]
@@ -76,6 +83,37 @@ def testing_the_algorithm(coils):
         population = replacement_elitism(population, offspring[0], offspring[1])
         population.update_fitness()
         best = population.get_best_solution()
-        print("Generation ", i, " best: ", population.get_chromosome_by_index(best[0]).getSequence(), ", with fitness: ", best[1])
-        lst.append(best)
+        # print("Generation ", i, " best: ", population.get_chromosome_by_index(best[0]).getSequence(), ", with fitness: ", best[1])
+        if i == (CONST_GENERATIONS - 1):
+            temp.append(population.get_chromosome_by_index(best[0]).getSequence())
+            temp.append(best[1])
+            lst.append(temp)
+    save_data_to_excel_first_and_last(lst)
     return lst
+
+
+def save_data_to_excel_first_and_last(lst):
+    wb = Workbook()
+    ws = wb.active
+    ws["A1"] = "first generation:"
+    ws["C1"] = "last generation:"
+    ws["F1"] = "fitness improvement:"
+    ws["F2"] = "penalty improvement:"
+    ws["G1"] = float(float(lst[1][1])/float(lst[0][1]))*100
+    ws["G2"] = float((1-float(lst[1][1])) / (1-float(lst[0][1])))*100
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 1)
+    ws[cell] = "first generation fit:"
+    cell = "C" + str(CONST_SEQUENCE_LENGTH + 1)
+    ws[cell] = "last generation fit:"
+    cell = "B"
+    for i in range(2):
+        for j in range(CONST_SEQUENCE_LENGTH):
+            temp = cell + str(j+1)
+            ws[temp] = int(lst[i][0][j])
+        cell = "D"
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 1)
+    ws[cell] = float(lst[0][1])
+    cell = "D" + str(CONST_SEQUENCE_LENGTH + 1)
+    ws[cell] = float(lst[1][1])
+
+    wb.save("1st & last gens.xlsx")
