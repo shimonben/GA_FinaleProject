@@ -17,7 +17,11 @@ class Genome:
         return self.sequence
 
     def setRange(self, minRange, maxRange):
-        self.range = [minRange, maxRange]
+        if minRange < maxRange:
+            self.range = [minRange, maxRange]
+            return True
+        else:
+            return False
 
     def getRange(self):
         return self.range
