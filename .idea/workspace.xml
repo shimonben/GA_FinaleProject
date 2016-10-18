@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="103ceb04-301d-4668-a58c-222e0c196f76" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Assist.py" afterPath="$PROJECT_DIR$/Assist.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GAutils.py" afterPath="$PROJECT_DIR$/GAutils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="GA_FinaleProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,8 +27,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state relative-caret-position="187">
+              <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
               <folding>
                 <element signature="e#83#92#0" expanded="true" />
               </folding>
@@ -39,12 +39,12 @@
       <file leaf-file-name="GAutils.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GAutils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="74" column="48" selection-start-line="74" selection-start-column="48" selection-end-line="74" selection-end-column="48" />
+            <state relative-caret-position="-2414">
+              <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
-                <element signature="e#635#1238#0" expanded="false" />
-                <element signature="e#1273#1997#0" expanded="false" />
+                <element signature="e#668#1271#0" expanded="false" />
+                <element signature="e#1306#2030#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -56,18 +56,6 @@
             <state relative-caret-position="170">
               <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Assist.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assist.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="29" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -90,7 +78,6 @@
         <option value="$PROJECT_DIR$/Switch.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/unitTest.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Operators/CrossOver.py" />
         <option value="$PROJECT_DIR$/Operators/Mutation.py" />
         <option value="$PROJECT_DIR$/Operators/Selection.py" />
@@ -101,6 +88,7 @@
         <option value="$PROJECT_DIR$/Steel.py" />
         <option value="$PROJECT_DIR$/UnitTests/UnitTestsCoilsInput.py" />
         <option value="$USER_HOME$/PycharmProjects/untitled2/taxes.py" />
+        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Assist.py" />
         <option value="$PROJECT_DIR$/GAutils.py" />
       </list>
@@ -866,31 +854,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assist.py">
+    <entry file="file://$PROJECT_DIR$/Genome.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="29" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-102">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state relative-caret-position="187">
+          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
           <folding>
             <element signature="e#83#92#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Genome.py">
+    <entry file="file://$PROJECT_DIR$/Assist.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="170">
+          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -904,12 +892,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GAutils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="74" column="48" selection-start-line="74" selection-start-column="48" selection-end-line="74" selection-end-column="48" />
+        <state relative-caret-position="-2414">
+          <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
-            <element signature="e#635#1238#0" expanded="false" />
-            <element signature="e#1273#1997#0" expanded="false" />
+            <element signature="e#668#1271#0" expanded="false" />
+            <element signature="e#1306#2030#0" expanded="false" />
           </folding>
         </state>
       </provider>

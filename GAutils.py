@@ -10,6 +10,7 @@ from Operators.Replacement import replacement_elitism
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 250
 CONST_GENERATIONS = 1000
+CONST_GENERATIONS_TO_TEST = 1000
 CONST_MUTATION_PROBABILITY = 0.75
 CONST_MAX_THICKNESS = 80
 CONST_MAX_WIDTH = 10
@@ -115,5 +116,89 @@ def save_data_to_excel_first_and_last(lst):
     ws[cell] = float(lst[0][1])
     cell = "D" + str(CONST_SEQUENCE_LENGTH + 1)
     ws[cell] = float(lst[1][1])
-
     wb.save("1st & last gens.xlsx")
+
+    def testing_the_algorithm(coils):
+        population = Population.Population(coils)
+        population.createInitial(CONST_POPULATION_SIZE)
+        lst = []
+        temp = []
+        for i in range(CONST_GENERATIONS):
+            population.updateGenesRange()
+            best = population.get_best_solution()
+            if i == 0:
+                temp.append(population.get_chromosome_by_index(best[0]).getSequence())
+                temp.append(best[1])
+                lst.append(temp)
+                temp = []
+            selected = rouletteSelection(population)
+            offspring = crossover(selected[0], selected[1])
+            c1 = offspring[0]
+            c2 = offspring[1]
+            c1 = mutate(c1)
+            c2 = mutate(c2)
+            c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
+            c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
+            population = replacement_elitism(population, offspring[0], offspring[1])
+            population.update_fitness()
+            best = population.get_best_solution()
+            # print("Generation ", i, " best: ", population.get_chromosome_by_index(best[0]).getSequence(), ", with fitness: ", best[1])
+            if i == (CONST_GENERATIONS - 1):
+                temp.append(population.get_chromosome_by_index(best[0]).getSequence())
+                temp.append(best[1])
+                lst.append(temp)
+        save_data_to_excel_first_and_last(lst)
+        return lst
+
+
+def testing_the_algorithm_1000_runs(coils):
+    sum_first_generation_fit = 0
+    sum_last_generation_fit = 0
+    sum_fit_improvement = 0
+    sum_penalty_improvement = 0
+    temp_first = 0
+    temp_last = 0
+    for run in range(CONST_GENERATIONS_TO_TEST):
+        population = Population.Population(coils)
+        population.createInitial(CONST_POPULATION_SIZE)
+        for i in range(CONST_GENERATIONS):
+            population.updateGenesRange()
+            best = population.get_best_solution()
+            if i == 0:
+                sum_first_generation_fit += best[1]
+                temp_first = best[1]
+            selected = rouletteSelection(population)
+            offspring = crossover(selected[0], selected[1])
+            c1 = offspring[0]
+            c2 = offspring[1]
+            c1 = mutate(c1)
+            c2 = mutate(c2)
+            c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
+            c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
+            population = replacement_elitism(population, offspring[0], offspring[1])
+            population.update_fitness()
+            best = population.get_best_solution()
+            if i == (CONST_GENERATIONS - 1):
+                sum_last_generation_fit += best[1]
+                temp_last = best[1]
+        sum_fit_improvement += (temp_last/temp_first)*100
+        sum_penalty_improvement += ((1-temp_last)/(1-temp_first))*100
+        print(run)
+    sum_first_generation_fit /= CONST_GENERATIONS_TO_TEST
+    sum_last_generation_fit /= CONST_GENERATIONS_TO_TEST
+    sum_fit_improvement /= CONST_GENERATIONS_TO_TEST
+    sum_penalty_improvement /= CONST_GENERATIONS_TO_TEST
+    wb = Workbook()
+    ws = wb.active
+    ws["A1"] = "first generation avg:"
+    ws["B1"] = "last generation avg:"
+    ws["C1"] = "fitness improvement avg:"
+    ws["D1"] = "penalty improvement avg:"
+    ws["E1"] = "population size:"
+    ws["A2"] = sum_first_generation_fit
+    ws["B2"] = sum_last_generation_fit
+    ws["C2"] = sum_fit_improvement
+    ws["D2"] = sum_penalty_improvement
+    ws["E2"] = CONST_POPULATION_SIZE
+    file_name = str(CONST_GENERATIONS_TO_TEST) + " runs avg.xlsx"
+    wb.save(file_name)
