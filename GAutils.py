@@ -6,6 +6,7 @@ from Operators.CrossOver import crossover
 from Operators.Mutation import mutate
 from Operators.Selection import rouletteSelection
 from Operators.Replacement import replacement_elitism
+import numpy
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 250
@@ -84,12 +85,10 @@ def testing_the_algorithm(coils):
         population = replacement_elitism(population, offspring[0], offspring[1])
         population.update_fitness()
         best = population.get_best_solution()
-        # print("Generation ", i, " best: ", population.get_chromosome_by_index(best[0]).getSequence(), ", with fitness: ", best[1])
         if i == (CONST_GENERATIONS - 1):
             temp.append(population.get_chromosome_by_index(best[0]).getSequence())
             temp.append(best[1])
             lst.append(temp)
-    #save_data_to_excel_first_and_last(lst)
     save_data_to_excel(lst)
 
 
@@ -190,3 +189,39 @@ def save_data_to_excel(lst):
     ws[cell] = float(lst[1][1])
     wb.save("output.xlsx")
     print(float(lst[1][1]))
+
+
+def testing_the_algorithm_total_and_best_improvement(coils):
+    population = Population.Population(coils)
+    population.createInitial(CONST_POPULATION_SIZE)
+    best_improve = []
+    total_improve = []
+    for i in range(CONST_GENERATIONS):
+        population.updateGenesRange()
+        selected = rouletteSelection(population)
+        offspring = crossover(selected[0], selected[1])
+        c1 = offspring[0]
+        c2 = offspring[1]
+        c1 = mutate(c1)
+        c2 = mutate(c2)
+        c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
+        c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
+        population = replacement_elitism(population, offspring[0], offspring[1])
+        population.update_fitness()
+        best = population.get_best_solution()
+        best_improve.append(best[1])
+        total_improve.append(population.getFitness())
+    save_data_to_excel_self_and_total_improve(best_improve, total_improve)
+
+
+def save_data_to_excel_self_and_total_improve(lst_best, lst_total):
+    wb = Workbook()
+    ws = wb.active
+    ws["A1"] = "best solution improvement:"
+    ws["B1"] = "population improvement:"
+    cell1 = "A"
+    cell2 = "B"
+    for j in range(CONST_GENERATIONS):
+        ws[cell1 + str(j + 2)] = float(lst_best[j])
+        ws[cell2 + str(j + 2)] = float(lst_total[j])
+    wb.save("total and best improvements.xlsx")

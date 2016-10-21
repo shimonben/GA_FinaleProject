@@ -13,6 +13,7 @@ def main():
     if os.path.isfile("coils.xlsx"):
         coils = GAutils.get_coils_from_excel()
         GAutils.testing_the_algorithm(coils)
+        # GAutils.testing_the_algorithm_total_and_best_improvement(coils)
         # GAutils.testing_the_algorithm_1000_runs(coils)
     else:
         print("Excel file not found, system shutdown")

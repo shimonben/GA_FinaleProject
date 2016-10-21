@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="103ceb04-301d-4668-a58c-222e0c196f76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output.xlsx" afterPath="$PROJECT_DIR$/output.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Genome.py" afterPath="$PROJECT_DIR$/Genome.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GAutils.py" afterPath="$PROJECT_DIR$/GAutils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="GA_FinaleProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,8 +27,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="46" />
+            <state relative-caret-position="238">
+              <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
               <folding>
                 <element signature="e#83#92#0" expanded="true" />
               </folding>
@@ -36,28 +36,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GAutils.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GAutils.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GAutils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+            <state relative-caret-position="350">
+              <caret line="189" column="19" selection-start-line="189" selection-start-column="13" selection-end-line="189" selection-end-column="19" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
-                <element signature="e#668#1271#0" expanded="false" />
-                <element signature="e#1306#2030#0" expanded="false" />
-                <element signature="e#3484#4342#0" expanded="false" />
-                <element signature="e#4393#6555#0" expanded="false" />
-                <element signature="e#6591#7212#0" expanded="false" />
+                <element signature="e#681#1284#0" expanded="false" />
+                <element signature="e#1319#2043#0" expanded="false" />
+                <element signature="e#3320#4178#0" expanded="false" />
+                <element signature="e#4229#6391#0" expanded="false" />
+                <element signature="e#7116#8039#0" expanded="false" />
+                <element signature="e#8114#8457#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Genome_UnitTest.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Genome_UnitTest.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/UnitTests/Genome_UnitTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
+            <state relative-caret-position="153">
+              <caret line="30" column="24" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -104,11 +105,11 @@
         <option value="$PROJECT_DIR$/UnitTests/UnitTestsCoilsInput.py" />
         <option value="$USER_HOME$/PycharmProjects/untitled2/taxes.py" />
         <option value="$PROJECT_DIR$/Assist.py" />
-        <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/GAutils.py" />
         <option value="$PROJECT_DIR$/Genome.py" />
         <option value="$PROJECT_DIR$/test_genome.py" />
         <option value="$PROJECT_DIR$/UnitTests/Genome_UnitTest.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/GAutils.py" />
       </list>
     </option>
   </component>
@@ -536,9 +537,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18409091" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18409091" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32582322" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.2293373" order="7" side_tool="true" content_ui="tabs" />
@@ -875,16 +876,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="46" />
-          <folding>
-            <element signature="e#83#92#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_genome.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -917,29 +908,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Population.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="21" column="69" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GAutils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-            <element signature="e#668#1271#0" expanded="false" />
-            <element signature="e#1306#2030#0" expanded="false" />
-            <element signature="e#3484#4342#0" expanded="false" />
-            <element signature="e#4393#6555#0" expanded="false" />
-            <element signature="e#6591#7212#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Genome.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="571">
@@ -950,10 +918,44 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/UnitTests/Genome_UnitTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
+        <state relative-caret-position="153">
+          <caret line="30" column="24" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Population.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="38" column="27" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="28" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
+          <folding>
+            <element signature="e#83#92#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GAutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="189" column="19" selection-start-line="189" selection-start-column="13" selection-end-line="189" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#681#1284#0" expanded="false" />
+            <element signature="e#1319#2043#0" expanded="false" />
+            <element signature="e#3320#4178#0" expanded="false" />
+            <element signature="e#4229#6391#0" expanded="false" />
+            <element signature="e#7116#8039#0" expanded="false" />
+            <element signature="e#8114#8457#0" expanded="false" />
           </folding>
         </state>
       </provider>
