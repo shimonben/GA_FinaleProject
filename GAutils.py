@@ -188,7 +188,6 @@ def save_data_to_excel(lst):
     cell = "B" + str(CONST_SEQUENCE_LENGTH + 1)
     ws[cell] = float(lst[1][1])
     wb.save("output.xlsx")
-    print(float(lst[1][1]))
 
 
 def testing_the_algorithm_total_and_best_improvement(coils):
