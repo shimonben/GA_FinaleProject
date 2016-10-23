@@ -16,7 +16,19 @@ CONST_MIN_STEEL_GRADE = 0.1
 class TestGenomeClass(unittest.TestCase):
     def test_Genome_sequence(self):
         seq = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        seq_fail = [0, 1, 2, 3, 4, 5, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        sum_of_20 = 190
         subject = Genome.Genome(seq)
+        counter = 190
+        counter_fail = 190
+        for i in range(20):
+            if seq[i] in seq:
+                counter -= seq[i]
+        for i in range(20):
+            if seq_fail[i] in seq_fail:
+                counter_fail -= seq_fail[i]
+        self.assertTrue(counter == 0)
+        self.assertFalse(counter_fail == 0) # should be 4 in case of true
         self.assertEqual(seq, subject.getSequence())
 
     def test_Genome_range(self):
