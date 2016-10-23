@@ -90,6 +90,8 @@ def testing_the_algorithm(coils):
             temp.append(best[1])
             lst.append(temp)
     save_data_to_excel(lst)
+    improvement_from_last_to_first = lst[1][1] - lst[0][1]
+    return improvement_from_last_to_first
 
 
 def save_data_to_excel_first_and_last(lst):
