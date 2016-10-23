@@ -42,6 +42,5 @@ class TestGenomeClass(unittest.TestCase):
         self.assertTrue(subject.fitness + subject.penalty == 1)
 
 
-
 if __name__ == '__main__':
     unittest.main()
