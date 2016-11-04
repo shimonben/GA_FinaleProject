@@ -21,6 +21,7 @@ CONST_MIN_THICKNESS = 20
 CONST_MIN_WIDTH = 4
 CONST_MIN_ZINC_THICKNESS = 40
 CONST_MIN_STEEL_GRADE = 0.1
+CONST_THRESHOLD = 0.3
 
 
 def get_coils_from_excel():
@@ -89,7 +90,16 @@ def testing_the_algorithm(coils):
             temp.append(population.get_chromosome_by_index(best[0]).getSequence())
             temp.append(best[1])
             lst.append(temp)
-    save_data_to_excel(lst)
+    best_seq = population.get_chromosome_by_index(best[0]).getSequence()
+    transition = []
+    for i in range(CONST_SEQUENCE_LENGTH - 1):
+        temp = coils[best_seq[i]].calculate_penalty(coils[best_seq[i + 1]])
+        temp = temp / Steel.calculate_max_penalty()
+        if temp > CONST_THRESHOLD:
+            transition.append(1)
+        else:
+            transition.append(0)
+    save_data_to_excel(lst, transition)
     improvement_from_last_to_first = lst[1][1] - lst[0][1]
     return improvement_from_last_to_first
 
@@ -173,22 +183,28 @@ def testing_the_algorithm_1000_runs(coils):
     wb.save(file_name)
 
 
-def save_data_to_excel(lst):
+def save_data_to_excel(lst, transition):
     wb = Workbook()
     ws = wb.active
+    best_seq = lst[1][0]
     ws["A1"] = "sequence to use:"
     ws["C1"] = "fitness improvement:"
     ws["C2"] = "penalty improvement:"
     ws["D1"] = float(float(lst[1][1])/float(lst[0][1]))*100
     ws["D2"] = float((1-float(lst[1][1])) / (1-float(lst[0][1])))*100
-    cell = "A" + str(CONST_SEQUENCE_LENGTH + 1)
-    ws[cell] = "last generation fit:"
     cell = "B"
+    insertion_coils_for_penalty = 0
     for j in range(CONST_SEQUENCE_LENGTH):
-        temp = cell + str(j+1)
-        ws[temp] = int(lst[1][0][j])
-    cell = "B" + str(CONST_SEQUENCE_LENGTH + 1)
+        temp = cell + str(j + 1 + insertion_coils_for_penalty)
+        ws[temp] = int(best_seq[j])
+        if j < (CONST_SEQUENCE_LENGTH - 1) and transition[j] == 1:
+            insertion_coils_for_penalty += 1
+            temp = cell + str(j + 1 + insertion_coils_for_penalty)
+            ws[temp] = "Transition"
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty)
     ws[cell] = float(lst[1][1])
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty)
+    ws[cell] = "last generation fit:"
     wb.save("output.xlsx")
 
 
