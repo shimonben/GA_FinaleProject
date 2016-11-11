@@ -6,7 +6,6 @@ from Operators.CrossOver import crossover
 from Operators.Mutation import mutate
 from Operators.Selection import rouletteSelection
 from Operators.Replacement import replacement_elitism
-import numpy
 
 CONST_SEQUENCE_LENGTH = 20
 CONST_POPULATION_SIZE = 250
@@ -22,6 +21,11 @@ CONST_MIN_WIDTH = 4
 CONST_MIN_ZINC_THICKNESS = 40
 CONST_MIN_STEEL_GRADE = 0.1
 CONST_THRESHOLD = 0.3
+
+CONST_THICK_DIF = CONST_MAX_THICKNESS - CONST_MIN_THICKNESS
+CONST_ZINC_DIF = CONST_MAX_ZINC_THICKNESS - CONST_MIN_ZINC_THICKNESS
+CONST_WIDTH_DIF = CONST_MAX_WIDTH - CONST_MIN_WIDTH
+CONST_STEEL_DIF = CONST_MAX_STEEL_GRADE - CONST_MIN_STEEL_GRADE
 
 
 def get_coils_from_excel():
@@ -94,7 +98,6 @@ def testing_the_algorithm(coils):
     transition = []
     for i in range(CONST_SEQUENCE_LENGTH - 1):
         temp = coils[best_seq[i]].calculate_penalty(coils[best_seq[i + 1]])
-        temp = temp / Steel.calculate_max_penalty()
         if temp > CONST_THRESHOLD:
             transition.append(1)
         else:

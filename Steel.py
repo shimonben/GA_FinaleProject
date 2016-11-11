@@ -36,8 +36,10 @@ class Steel:
         width_dif = math.fabs(self.width - coil2.width)
         zinc_thickness_dif = math.fabs(self.zinc_thickness - coil2.zinc_thickness)
         steel_grade_dif = math.fabs(self.steel_grade - coil2.steel_grade)
-        penalty = (thickness_dif * CONST_THICKNESS_PENALTY) + (width_dif * CONST_WIDTH_PENALTY) + (
-            zinc_thickness_dif * CONST_ZINC_THICKNESS_PENALTY) + (steel_grade_dif * CONST_STEEL_GRADE_PENALTY)
+        penalty = ((thickness_dif/GAutils.CONST_THICK_DIF) * CONST_THICKNESS_PENALTY) + \
+                  ((width_dif/GAutils.CONST_WIDTH_DIF) * CONST_WIDTH_PENALTY) + \
+                  ((zinc_thickness_dif/GAutils.CONST_THICK_DIF) * CONST_ZINC_THICKNESS_PENALTY) + \
+                  ((steel_grade_dif/GAutils.CONST_STEEL_DIF) * CONST_STEEL_GRADE_PENALTY)
         return penalty
 
 

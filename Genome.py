@@ -33,7 +33,6 @@ class Genome:
         penalty = 0
         for i in range(GAutils.CONST_SEQUENCE_LENGTH - 1):
             temp = coils[sequence[i]].calculate_penalty(coils[sequence[i+1]])
-            temp = temp / max_penalty
             penalty += temp
         self.fitness = 1 - (penalty / (GAutils.CONST_SEQUENCE_LENGTH - 1))
         self.penalty = penalty / (GAutils.CONST_SEQUENCE_LENGTH - 1)
