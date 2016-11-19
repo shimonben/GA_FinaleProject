@@ -6,8 +6,10 @@ from Operators.CrossOver import crossover
 from Operators.Mutation import mutate
 from Operators.Selection import rouletteSelection
 from Operators.Replacement import replacement_elitism
+import xlsxwriter
+import main
 
-CONST_SEQUENCE_LENGTH = 20
+CONST_SEQUENCE_LENGTH = main.CONST_COILS_IN_BATCH
 CONST_POPULATION_SIZE = 250
 CONST_GENERATIONS = 1000
 CONST_GENERATIONS_TO_TEST = 1000
@@ -29,7 +31,7 @@ CONST_STEEL_DIF = CONST_MAX_STEEL_GRADE - CONST_MIN_STEEL_GRADE
 
 
 def get_coils_from_excel():
-    wb = load_workbook('coils.xlsx')
+    wb = load_workbook(main.CONST_EXCEL_FILE_NAME_TO_READ)
     ws = wb.active
     coils = []
     i = 0
@@ -52,16 +54,16 @@ def get_coils_from_excel():
 
 def check_validity(row, i):
     if (row[3].value < CONST_MIN_THICKNESS) or (row[3].value > CONST_MAX_THICKNESS):
-        print("in coil ", i+1, ", there is a problem with thickness")
+        print("in coil ", i + 1, ", there is a problem with thickness")
         return False
     if (row[2].value < CONST_MIN_WIDTH) or (row[2].value > CONST_MAX_WIDTH):
-        print("in coil ", i+1, ", there is a problem with width")
+        print("in coil ", i + 1, ", there is a problem with width")
         return False
     if (row[1].value < CONST_MIN_ZINC_THICKNESS) or (row[1].value > CONST_MAX_ZINC_THICKNESS):
-        print("in coil ", i+1, ", there is a problem with zinc thickness")
+        print("in coil ", i + 1, ", there is a problem with zinc thickness")
         return False
     if (row[0].value < CONST_MIN_STEEL_GRADE) or (row[0].value > CONST_MAX_STEEL_GRADE):
-        print("in coil ", i+1, ", there is a problem with steel grade")
+        print("in coil ", i + 1, ", there is a problem with steel grade")
         return False
     return True
 
@@ -102,7 +104,7 @@ def testing_the_algorithm(coils):
             transition.append(1)
         else:
             transition.append(0)
-    save_data_to_excel(lst, transition)
+    save_data_to_excel(lst, transition, coils)
     improvement_from_last_to_first = lst[1][1] - lst[0][1]
     return improvement_from_last_to_first
 
@@ -114,8 +116,8 @@ def save_data_to_excel_first_and_last(lst):
     ws["C1"] = "last generation:"
     ws["F1"] = "fitness improvement:"
     ws["F2"] = "penalty improvement:"
-    ws["G1"] = float(float(lst[1][1])/float(lst[0][1]))*100
-    ws["G2"] = float((1-float(lst[1][1])) / (1-float(lst[0][1])))*100
+    ws["G1"] = float(float(lst[1][1]) / float(lst[0][1])) * 100
+    ws["G2"] = float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100
     cell = "A" + str(CONST_SEQUENCE_LENGTH + 1)
     ws[cell] = "first generation fit:"
     cell = "C" + str(CONST_SEQUENCE_LENGTH + 1)
@@ -123,7 +125,7 @@ def save_data_to_excel_first_and_last(lst):
     cell = "B"
     for i in range(2):
         for j in range(CONST_SEQUENCE_LENGTH):
-            temp = cell + str(j+1)
+            temp = cell + str(j + 1)
             ws[temp] = int(lst[i][0][j])
         cell = "D"
     cell = "B" + str(CONST_SEQUENCE_LENGTH + 1)
@@ -163,8 +165,8 @@ def testing_the_algorithm_1000_runs(coils):
             if i == (CONST_GENERATIONS - 1):
                 sum_last_generation_fit += best[1]
                 temp_last = best[1]
-        sum_fit_improvement += (temp_last/temp_first)*100
-        sum_penalty_improvement += ((1-temp_last)/(1-temp_first))*100
+        sum_fit_improvement += (temp_last / temp_first) * 100
+        sum_penalty_improvement += ((1 - temp_last) / (1 - temp_first)) * 100
         print(run)
     sum_first_generation_fit /= CONST_GENERATIONS_TO_TEST
     sum_last_generation_fit /= CONST_GENERATIONS_TO_TEST
@@ -186,29 +188,100 @@ def testing_the_algorithm_1000_runs(coils):
     wb.save(file_name)
 
 
-def save_data_to_excel(lst, transition):
-    wb = Workbook()
-    ws = wb.active
+def save_data_to_excel(lst, transition, coils):
+    steel_grade_array = []
+    zinc_thickness_array = []
+    width_array = []
+    thickness_array = []
+    sequence_arr = []
     best_seq = lst[1][0]
-    ws["A1"] = "sequence to use:"
-    ws["C1"] = "fitness improvement:"
-    ws["C2"] = "penalty improvement:"
-    ws["D1"] = float(float(lst[1][1])/float(lst[0][1]))*100
-    ws["D2"] = float((1-float(lst[1][1])) / (1-float(lst[0][1])))*100
-    cell = "B"
+    i = 1
     insertion_coils_for_penalty = 0
+    counter = 1  # first headlines for the attributes
     for j in range(CONST_SEQUENCE_LENGTH):
-        temp = cell + str(j + 1 + insertion_coils_for_penalty)
-        ws[temp] = int(best_seq[j])
+        sequence_arr.append(best_seq[j] + 1)
+        steel_grade_array.append(coils[best_seq[j]].steel_grade)
+        zinc_thickness_array.append(coils[best_seq[j]].zinc_thickness)
+        width_array.append(coils[best_seq[j]].width)
+        thickness_array.append(coils[best_seq[j]].thickness)
+        counter += 1  # row added
         if j < (CONST_SEQUENCE_LENGTH - 1) and transition[j] == 1:
             insertion_coils_for_penalty += 1
-            temp = cell + str(j + 1 + insertion_coils_for_penalty)
-            ws[temp] = "Transition"
-    cell = "B" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty)
-    ws[cell] = float(lst[1][1])
-    cell = "A" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty)
-    ws[cell] = "last generation fit:"
-    wb.save("output.xlsx")
+            steel_grade_array.append('')
+            zinc_thickness_array.append('')
+            width_array.append('')
+            thickness_array.append('')
+            sequence_arr.append("Transition")
+            counter += 1  # row added for transition
+
+    workbook = xlsxwriter.Workbook(main.CONST_EXCEL_FILE_NAME_TO_WRITE)
+    worksheet = workbook.add_worksheet()
+    bold = workbook.add_format({'bold': 1})
+    headings = ['Sequence', 'Steel Grade', 'Zinc Thickness', 'Steel Width', 'Steel Thickness']
+    worksheet.write_row('A1', headings, bold)
+    worksheet.write_column('A2', sequence_arr)
+    worksheet.write_column('B2', steel_grade_array)
+    worksheet.write_column('C2', zinc_thickness_array)
+    worksheet.write_column('D2', width_array)
+    worksheet.write_column('E2', thickness_array)
+
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, float(lst[1][1]))
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "last generation fit:")
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "penalty improvement:")
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100)
+
+    chart3 = workbook.add_chart({'type': 'column'})
+    chart3.add_series({
+        'name': '=Sheet1!$B$1',
+        'categories': '=Sheet1!$A$2:$A$' + str(counter),
+        'values': '=Sheet1!$B$2:$B$' + str(counter),
+    })
+    chart3.set_title({'name': 'Steel Grade ('+str(Steel.CONST_STEEL_GRADE_PENALTY)+')'})
+    chart3.set_x_axis({'name': 'Sequence'})
+    chart3.set_y_axis({'name': 'Steel Grade'})
+    chart3.set_style(3)
+    worksheet.insert_chart('F12', chart3, {'x_scale': 2, 'y_scale': 0.75})
+
+    chart2 = workbook.add_chart({'type': 'column'})
+    chart2.add_series({
+        'name': '=Sheet1!$C$1',
+        'categories': '=Sheet1!$A$2:$A$' + str(counter),
+        'values': '=Sheet1!$C$2:$C$' + str(counter),
+    })
+    chart2.set_title({'name': 'Zinc Thickness ('+str(Steel.CONST_ZINC_THICKNESS_PENALTY)+')'})
+    chart2.set_x_axis({'name': 'Sequence'})
+    chart2.set_y_axis({'name': 'Zinc Thickness'})
+    chart2.set_style(3)
+    worksheet.insert_chart('F1', chart2, {'x_scale': 2, 'y_scale': 0.75})
+
+    chart1 = workbook.add_chart({'type': 'column'})
+    chart1.add_series({
+        'name': '=Sheet1!$D$1',
+        'categories': '=Sheet1!$A$2:$A$' + str(counter),
+        'values': '=Sheet1!$D$2:$D$' + str(counter),
+    })
+    chart1.set_title({'name': 'Steel Width (' + str(Steel.CONST_WIDTH_PENALTY) + ')'})
+    chart1.set_x_axis({'name': 'Sequence'})
+    chart1.set_y_axis({'name': 'Steel Width'})
+    chart1.set_style(3)
+    worksheet.insert_chart('F23', chart1, {'x_scale': 2, 'y_scale': 0.75})
+
+    chart4 = workbook.add_chart({'type': 'column'})
+    chart4.add_series({
+        'name': '=Sheet1!$E$1',
+        'categories': '=Sheet1!$A$2:$A$' + str(counter),
+        'values': '=Sheet1!$E$2:$E$' + str(counter),
+    })
+    chart4.set_title({'name': 'Steel Thickness (' + str(Steel.CONST_THICKNESS_PENALTY) + ')'})
+    chart4.set_x_axis({'name': 'Sequence'})
+    chart4.set_y_axis({'name': 'Steel Thickness'})
+    chart4.set_style(3)
+    worksheet.insert_chart('F34', chart4, {'x_scale': 2, 'y_scale': 0.75})
+    workbook.close()
 
 
 def testing_the_algorithm_total_and_best_improvement(coils):

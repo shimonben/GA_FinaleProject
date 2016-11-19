@@ -15,9 +15,9 @@ class TestSteelClass(unittest.TestCase):
         population = Population.Population(coils)
         population.createInitial(GAutils.CONST_POPULATION_SIZE)
         # coils[0] is pf type Steel and holds the attributes for the coils
-        temp = coils[0].calculate_penalty(coils[1])/Steel.calculate_max_penalty()
+        temp = coils[0].calculate_penalty(coils[1])
         temp = float("%.4f" % temp)
-        self.assertAlmostEqual(temp, 0.1885)
+        self.assertAlmostEqual(temp, 0.1984)
 
 
 if __name__ == '__main__':
