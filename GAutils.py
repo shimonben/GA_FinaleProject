@@ -22,7 +22,7 @@ CONST_MIN_THICKNESS = 20
 CONST_MIN_WIDTH = 4
 CONST_MIN_ZINC_THICKNESS = 40
 CONST_MIN_STEEL_GRADE = 0.1
-CONST_THRESHOLD = 0.3
+CONST_THRESHOLD = 0.5
 
 CONST_THICK_DIF = CONST_MAX_THICKNESS - CONST_MIN_THICKNESS
 CONST_ZINC_DIF = CONST_MAX_ZINC_THICKNESS - CONST_MIN_ZINC_THICKNESS
@@ -73,6 +73,7 @@ def testing_the_algorithm(coils):
     population.createInitial(CONST_POPULATION_SIZE)
     lst = []
     temp = []
+    sum_of_penalty = 0
     for i in range(CONST_GENERATIONS):
         population.updateGenesRange()
         best = population.get_best_solution()
@@ -100,13 +101,15 @@ def testing_the_algorithm(coils):
     transition = []
     for i in range(CONST_SEQUENCE_LENGTH - 1):
         temp = coils[best_seq[i]].calculate_penalty(coils[best_seq[i + 1]])
+        sum_of_penalty += temp
         if temp > CONST_THRESHOLD:
             transition.append(1)
         else:
             transition.append(0)
-    save_data_to_excel(lst, transition, coils)
+    avg_of_penalty = sum_of_penalty/(CONST_SEQUENCE_LENGTH-1)
+    save_data_to_excel(lst, transition, coils, avg_of_penalty)
     improvement_from_last_to_first = lst[1][1] - lst[0][1]
-    return improvement_from_last_to_first
+    return float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100
 
 
 def save_data_to_excel_first_and_last(lst):
@@ -188,7 +191,7 @@ def testing_the_algorithm_1000_runs(coils):
     wb.save(file_name)
 
 
-def save_data_to_excel(lst, transition, coils):
+def save_data_to_excel(lst, transition, coils, avg_of_penalty):
     steel_grade_array = []
     zinc_thickness_array = []
     width_array = []
@@ -233,6 +236,10 @@ def save_data_to_excel(lst, transition, coils):
     worksheet.write(cell, "penalty improvement:")
     cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
     worksheet.write(cell, float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100)
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, avg_of_penalty)
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "avg penalty:")
 
     chart3 = workbook.add_chart({'type': 'column'})
     chart3.add_series({
