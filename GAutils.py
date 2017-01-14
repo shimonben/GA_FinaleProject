@@ -236,10 +236,10 @@ def save_data_to_excel(lst, transition, coils, avg_of_penalty):
     worksheet.write(cell, "penalty improvement:")
     cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
     worksheet.write(cell, float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100)
-    cell = "B" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
-    worksheet.write(cell, avg_of_penalty)
-    cell = "A" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
-    worksheet.write(cell, "avg penalty:")
+    #cell = "B" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
+    #worksheet.write(cell, avg_of_penalty)
+    #cell = "A" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
+    #worksheet.write(cell, "avg penalty:")
 
     chart3 = workbook.add_chart({'type': 'column'})
     chart3.add_series({

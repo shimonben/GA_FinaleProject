@@ -9,7 +9,7 @@ import GAutils
 
 CONST_COILS_IN_BATCH = 40
 CONST_EXCEL_FILE_NAME_TO_READ = "coils40.xlsx"
-CONST_EXCEL_FILE_NAME_TO_WRITE = "output 40 coils and 0.5 thresh.xlsx"
+CONST_EXCEL_FILE_NAME_TO_WRITE = "output40new.xlsx"
 
 
 # The user will get the option to choose between priority
