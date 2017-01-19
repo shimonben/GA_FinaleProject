@@ -10,7 +10,7 @@ import xlsxwriter
 import main
 
 CONST_SEQUENCE_LENGTH = main.CONST_COILS_IN_BATCH
-CONST_POPULATION_SIZE = 250
+CONST_POPULATION_SIZE = 1000
 CONST_GENERATIONS = 1000
 CONST_GENERATIONS_TO_TEST = 1000
 CONST_MUTATION_PROBABILITY = 0.75
@@ -75,6 +75,10 @@ def testing_the_algorithm(coils):
     temp = []
     sum_of_penalty = 0
     for i in range(CONST_GENERATIONS):
+        import os
+        os.system('cls')
+        print("Pleas wait while for the algorithm to finish")
+        print(str(int((i/CONST_GENERATIONS)*100))+"% finished")
         population.updateGenesRange()
         best = population.get_best_solution()
         if i == 0:
@@ -82,15 +86,20 @@ def testing_the_algorithm(coils):
             temp.append(best[1])
             lst.append(temp)
             temp = []
-        selected = rouletteSelection(population)
-        offspring = crossover(selected[0], selected[1])
-        c1 = offspring[0]
-        c2 = offspring[1]
-        c1 = mutate(c1)
-        c2 = mutate(c2)
-        c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
-        c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
-        population = replacement_elitism(population, offspring[0], offspring[1])
+        child_created = []
+        for k in range(CONST_POPULATION_SIZE//2):
+            selected = rouletteSelection(population)
+            offspring = crossover(selected[0], selected[1])
+            c1 = offspring[0]
+            c2 = offspring[1]
+            c1 = mutate(c1)
+            c2 = mutate(c2)
+            c1.evaluate(c1.getSequence(), Steel.calculate_max_penalty(), population.coils)
+            c2.evaluate(c2.getSequence(), Steel.calculate_max_penalty(), population.coils)
+            child_created.append(c1)
+            child_created.append(c2)
+        for k in range(CONST_POPULATION_SIZE//2):
+            population = replacement_elitism(population, child_created[k*2], child_created[k*2+1])
         population.update_fitness()
         best = population.get_best_solution()
         if i == (CONST_GENERATIONS - 1):
@@ -232,10 +241,10 @@ def save_data_to_excel(lst, transition, coils, avg_of_penalty):
     worksheet.write(cell, float(lst[1][1]))
     cell = "A" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty + i)
     worksheet.write(cell, "last generation fit:")
-    cell = "A" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
-    worksheet.write(cell, "penalty improvement:")
-    cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
-    worksheet.write(cell, float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100)
+    #cell = "A" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
+    #worksheet.write(cell, "penalty improvement:")
+    #cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
+    #worksheet.write(cell, float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100)
     #cell = "B" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
     #worksheet.write(cell, avg_of_penalty)
     #cell = "A" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)

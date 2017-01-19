@@ -18,7 +18,7 @@ CONST_EXCEL_FILE_NAME_TO_WRITE = "output40new.xlsx"
 def main():
     if os.path.isfile(CONST_EXCEL_FILE_NAME_TO_READ):
         coils = GAutils.get_coils_from_excel()
-        print(GAutils.testing_the_algorithm(coils))
+        GAutils.testing_the_algorithm(coils)
         '''
         lst_1000_penalty = []
         run = []
