@@ -2,7 +2,13 @@ import GAutils
 import random
 
 
+
 def mutate(child):
+    """
+    This method thakes a solution and alter it if the random number is between [0-CONST_MUTATION_PROBABILITY]
+    :param child: the solution to work with
+    :return: the solution after the mutation
+    """
     i = random.randint(0, GAutils.CONST_SEQUENCE_LENGTH)
     j = random.randint(i, GAutils.CONST_SEQUENCE_LENGTH)
     temp = random.uniform(0, 1)

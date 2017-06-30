@@ -7,37 +7,24 @@ import xlsxwriter
 
 import GAutils
 
-CONST_COILS_IN_BATCH = 40
+
 CONST_EXCEL_FILE_NAME_TO_READ = "coils40.xlsx"
-CONST_EXCEL_FILE_NAME_TO_WRITE = "output40new.xlsx"
 
 
-# The user will get the option to choose between priority
-# or time, both equals money, so it won't be an issue.
 
 def main():
+    """
+    This is the main method that runs the algorithm and provides the excel
+    :return: NONE
+    """
     if os.path.isfile(CONST_EXCEL_FILE_NAME_TO_READ):
         coils = GAutils.get_coils_from_excel()
-        GAutils.testing_the_algorithm(coils)
-        '''
-        lst_1000_penalty = []
-        run = []
-        sum_of_penalties = 0
-        for i in range(1000):
-            print(i)
-            run.append(i)
-            temp = GAutils.testing_the_algorithm(coils)
-            lst_1000_penalty.append(temp)
-            sum_of_penalties += temp
-        workbook = xlsxwriter.Workbook("Penalty improvement.xlsx")
-        worksheet = workbook.add_worksheet()
-        bold = workbook.add_format({'bold': 1})
-        headings = ['Iteration', 'Penalty improvement', '', 'AVG improvement']
-        worksheet.write_row('A1', headings, bold)
-        worksheet.write_column('A2', run)
-        worksheet.write_column('B2', lst_1000_penalty)
-        worksheet.write("D2", float(sum_of_penalties/1000))
-        '''
+        improvements_values = []
+        for i in range(20):
+            improvements_values.append(GAutils.testing_the_algorithm(coils, i))
+        temp = str(GAutils.CONST_EXCEL_FILE_NAME_TO_WRITE).split("\\")
+        temp = str(temp[7]) + str(improvements_values.index(max(improvements_values))) + ".xlsx"
+        print("The best improvement is in file: " + temp)
     else:
         print("Excel file not found, system shutdown")
         exit()

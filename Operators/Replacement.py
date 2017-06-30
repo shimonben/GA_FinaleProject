@@ -2,6 +2,13 @@ import GAutils
 
 
 def replacement_elitism(population, child1, child2):
+    """
+    This method search for the lesser good solutions and replace them with the new solutions
+    :param population: the population to work with
+    :param child1: the firs solution to push
+    :param child2: the second solution to push
+    :return: the new population
+    """
     new_population = population
     pop = population.getPop()
     index = 0

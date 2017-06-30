@@ -4,6 +4,12 @@ import Genome
 
 
 def crossover(chrom1, chrom2):
+    """
+    This method takes two parents solution and cross them in order to get a new solution
+    :param chrom1: the first parents solution
+    :param chrom2: the second parents solution
+    :return: the newborn solutions
+    """
     position = random.randint(0, GAutils.CONST_SEQUENCE_LENGTH)
     parent1 = chrom1.getSequence()
     parent2 = chrom2.getSequence()

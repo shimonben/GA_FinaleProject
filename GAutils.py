@@ -7,9 +7,15 @@ from Operators.Mutation import mutate
 from Operators.Selection import rouletteSelection
 from Operators.Replacement import replacement_elitism
 import xlsxwriter
+import time
 import main
 
-CONST_SEQUENCE_LENGTH = main.CONST_COILS_IN_BATCH
+
+CONST_COILS_IN_BATCH = 40
+CONST_EXCEL_FILE_NAME_TO_WRITE = r"C:\Users\Shimon\Documents\GitHub\GA_FinaleProject\Testing Dir\output40_"
+CONST_EXCEL_FILE_NAME_TO_READ = "coils40.xlsx"
+
+CONST_SEQUENCE_LENGTH = CONST_COILS_IN_BATCH
 CONST_POPULATION_SIZE = 1000
 CONST_GENERATIONS = 1000
 CONST_GENERATIONS_TO_TEST = 1000
@@ -31,7 +37,11 @@ CONST_STEEL_DIF = CONST_MAX_STEEL_GRADE - CONST_MIN_STEEL_GRADE
 
 
 def get_coils_from_excel():
-    wb = load_workbook(main.CONST_EXCEL_FILE_NAME_TO_READ)
+    """
+    This method reads the excel and saves the coils in a variable
+    :return: the coils stored in a variable
+    """
+    wb = load_workbook(CONST_EXCEL_FILE_NAME_TO_READ)
     ws = wb.active
     coils = []
     i = 0
@@ -53,6 +63,12 @@ def get_coils_from_excel():
 
 
 def check_validity(row, i):
+    """
+    This method checks the excel input, if some of the criteria are noe met, the algorithm will not run
+    :param row:
+    :param i:
+    :return:
+    """
     if (row[3].value < CONST_MIN_THICKNESS) or (row[3].value > CONST_MAX_THICKNESS):
         print("in coil ", i + 1, ", there is a problem with thickness")
         return False
@@ -68,16 +84,23 @@ def check_validity(row, i):
     return True
 
 
-def testing_the_algorithm(coils):
+def testing_the_algorithm(coils, run_index):
+    """
+    The main algorithm, actually runs the Genetic Algorithm and gives results
+    :param coils: the coils from the excel file
+    :return: penalty improvement
+    """
+    start_time = time.time()
     population = Population.Population(coils)
     population.createInitial(CONST_POPULATION_SIZE)
     lst = []
     temp = []
     sum_of_penalty = 0
+    best_at_each_gen = []
     for i in range(CONST_GENERATIONS):
         import os
         os.system('cls')
-        print("Pleas wait while for the algorithm to finish")
+        print("Pleas wait while for the algorithm to finish, iteration: " + str(run_index))
         print(str(int((i/CONST_GENERATIONS)*100))+"% finished")
         population.updateGenesRange()
         best = population.get_best_solution()
@@ -106,6 +129,7 @@ def testing_the_algorithm(coils):
             temp.append(population.get_chromosome_by_index(best[0]).getSequence())
             temp.append(best[1])
             lst.append(temp)
+        best_at_each_gen.append(best[1])
     best_seq = population.get_chromosome_by_index(best[0]).getSequence()
     transition = []
     for i in range(CONST_SEQUENCE_LENGTH - 1):
@@ -116,12 +140,19 @@ def testing_the_algorithm(coils):
         else:
             transition.append(0)
     avg_of_penalty = sum_of_penalty/(CONST_SEQUENCE_LENGTH-1)
-    save_data_to_excel(lst, transition, coils, avg_of_penalty)
+    run_time = round(time.time() - start_time)
+    save_data_to_excel(lst, transition, coils, avg_of_penalty, run_index, run_time)
     improvement_from_last_to_first = lst[1][1] - lst[0][1]
+    #save_excel_best_improvement(best_at_each_gen)
     return float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100
 
 
 def save_data_to_excel_first_and_last(lst):
+    """
+    This method used for research
+    :param lst: first and last generation best fit
+    :return:
+    """
     wb = Workbook()
     ws = wb.active
     ws["A1"] = "first generation:"
@@ -148,6 +179,11 @@ def save_data_to_excel_first_and_last(lst):
 
 
 def testing_the_algorithm_1000_runs(coils):
+    """
+    This method created for research only and not being used during normal runs
+    :param coils: the coils from the excel file
+    :return: NONE
+    """
     sum_first_generation_fit = 0
     sum_last_generation_fit = 0
     sum_fit_improvement = 0
@@ -200,7 +236,23 @@ def testing_the_algorithm_1000_runs(coils):
     wb.save(file_name)
 
 
-def save_data_to_excel(lst, transition, coils, avg_of_penalty):
+def save_excel_best_improvement(best_arr):
+    workbook = xlsxwriter.Workbook("testing improvement.xlsx")
+    worksheet = workbook.add_worksheet()
+    worksheet.write_column('A1', best_arr)
+    workbook.close()
+
+
+def save_data_to_excel(lst, transition, coils, avg_of_penalty, run_index, run_time):
+    """
+    This method gets the result of the algorithm and creates the output in excel
+    :param lst: a list that describes the best solution sequence, fitness and penalty
+    :param transition: amount of transition coils if needed
+    :param coils: coils for identification
+    :param avg_of_penalty: used for research
+    :return: NONE
+    """
+    improve_rate = float((1 - float(lst[1][1])) / (1 - float(lst[0][1]))) * 100
     steel_grade_array = []
     zinc_thickness_array = []
     width_array = []
@@ -226,7 +278,8 @@ def save_data_to_excel(lst, transition, coils, avg_of_penalty):
             sequence_arr.append("Transition")
             counter += 1  # row added for transition
 
-    workbook = xlsxwriter.Workbook(main.CONST_EXCEL_FILE_NAME_TO_WRITE)
+    file_name = CONST_EXCEL_FILE_NAME_TO_WRITE + str(run_index) + ".xlsx"
+    workbook = xlsxwriter.Workbook(file_name)
     worksheet = workbook.add_worksheet()
     bold = workbook.add_format({'bold': 1})
     headings = ['Sequence', 'Steel Grade', 'Zinc Thickness', 'Steel Width', 'Steel Thickness']
@@ -240,7 +293,29 @@ def save_data_to_excel(lst, transition, coils, avg_of_penalty):
     cell = "B" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty + i)
     worksheet.write(cell, float(lst[1][1]))
     cell = "A" + str(CONST_SEQUENCE_LENGTH + 1 + insertion_coils_for_penalty + i)
-    worksheet.write(cell, "last generation fit:")
+    worksheet.write(cell, "Last generation fit:")
+
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, improve_rate)
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "Improvement:")
+
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 3 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "Run Time:")
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 4 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "Hours")
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 4 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "Minutes")
+    cell = "C" + str(CONST_SEQUENCE_LENGTH + 4 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, "Seconds")
+    cell = "A" + str(CONST_SEQUENCE_LENGTH + 5 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, run_time//(60*60))
+    cell = "B" + str(CONST_SEQUENCE_LENGTH + 5 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, run_time//60)
+    cell = "C" + str(CONST_SEQUENCE_LENGTH + 5 + insertion_coils_for_penalty + i)
+    worksheet.write(cell, run_time%60)
+
+
     #cell = "A" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
     #worksheet.write(cell, "penalty improvement:")
     #cell = "B" + str(CONST_SEQUENCE_LENGTH + 2 + insertion_coils_for_penalty + i)
@@ -301,6 +376,11 @@ def save_data_to_excel(lst, transition, coils, avg_of_penalty):
 
 
 def testing_the_algorithm_total_and_best_improvement(coils):
+    """
+    This method used for research and debug purposes
+    :param coils: the coils from the excel file
+    :return: NONE
+    """
     population = Population.Population(coils)
     population.createInitial(CONST_POPULATION_SIZE)
     best_improve = []
@@ -324,6 +404,12 @@ def testing_the_algorithm_total_and_best_improvement(coils):
 
 
 def save_data_to_excel_self_and_total_improve(lst_best, lst_total):
+    """
+    This method used for research and debug purposes
+    :param lst_best: first and last generation best fit
+    :param lst_total: first and last generation total fit
+    :return: NONE
+    """
     wb = Workbook()
     ws = wb.active
     ws["A1"] = "best solution improvement:"
